@@ -4,6 +4,7 @@ import axios from "axios";
 import QueuesTable from "../QueuesTable/QueuesTable.jsx";
 import getColumns from "../../helpers/columns.js";
 import { retrieveQueues, deleteQueue, purgeQueue } from "../../helpers/queueService.js"
+import regeneratorRuntime from "regenerator-runtime"
 
 class App extends React.Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class App extends React.Component {
     this.fetchIdRef = React.createRef(0);
   }
 
-  fetchQueues = async ({ pageSize, pageIndex, filter, useRegex }) => {
+  fetchQueues = async ({ pageSize, pageIndex, filter, useRegex, sortBy }) => {
     // This will get called when the table needs new data
     let fetchId = ++this.fetchIdRef.current;
 
@@ -30,7 +31,7 @@ class App extends React.Component {
     if (fetchId === this.fetchIdRef.current) {
       const paginationOptions = { page: ++pageIndex, pageSize };
       const filteringOptions = { name: filter, useRegex };
-      const sortingOptions = {};
+      const sortingOptions = sortBy && sortBy.length ? { sort: sortBy[0].id, sortReverse: sortBy[0].desc } : {};
 
       const response = await retrieveQueues(this.props.config.authHeader, paginationOptions, filteringOptions, sortingOptions);
 

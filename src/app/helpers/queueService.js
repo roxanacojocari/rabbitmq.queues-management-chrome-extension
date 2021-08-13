@@ -1,11 +1,14 @@
 import axios from "axios";
 
-///api/queues?page=1&page_size=100&name=&use_regex=false&sort=consumers&sort_reverse=false&pagination=true
 async function retrieveQueues(authorization, { page, pageSize }, { name, useRegex }, { sort, sortReverse }) {
     const regex = useRegex ? 'true' : 'false';
     const encodedName = name ? encodeURIComponent(name) : '';
 
-    const url = `/api/queues?page=${page}&page_size=${pageSize}&name=${encodedName}&use_regex=${regex}&pagination=true`;
+    let url = `/api/queues?page=${page}&page_size=${pageSize}&name=${encodedName}&use_regex=${regex}&pagination=true`;
+    if (sort) {
+        const encodedSortProperty = encodeURIComponent(sort);
+        url = `/api/queues?page=${page}&page_size=${pageSize}&name=${encodedName}&use_regex=${regex}&sort=${encodedSortProperty}&sort_reverse=${sortReverse}&pagination=true`;
+    }
 
     return axios({
         method: "get",

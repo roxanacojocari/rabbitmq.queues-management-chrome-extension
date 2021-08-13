@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTable, useRowSelect, usePagination, useSortBy } from 'react-table'
+import { useAsyncDebounce, useTable, useRowSelect, usePagination, useSortBy } from 'react-table'
 import "./QueuesTable.css";
 import _ from 'lodash';
 
@@ -46,7 +46,7 @@ function QueuesTable({
         nextPage,
         previousPage,
         setPageSize,
-        state: { selectedRowIds, pageIndex, pageSize },
+        state: { selectedRowIds, pageIndex, pageSize, sortBy },
     } = useTable(
         {
             columns,
@@ -68,6 +68,7 @@ function QueuesTable({
                 // Let's make a column for selection
                 {
                     id: 'selection',
+                    canSort: false,
                     // The header can use the table's getToggleAllRowsSelectedProps method
                     // to render a checkbox
                     Header: ({ getToggleAllRowsSelectedProps }) => (
@@ -90,14 +91,13 @@ function QueuesTable({
 
     const [filter, setFilter] = React.useState('');
     const [useRegex, setUseRegex] = React.useState(false);
-    const [sort, setSort] = React.useState(false);
-    const [sortBy, setSortBy] = React.useState('');
-    const [sortDirection, setSortDirection] = React.useState('');
 
     const [preventDeleteWithMessages, setPreventDeleteWithMessages] = React.useState(false);
     const [preventDeleteWithConsumers, setPreventDeleteWithConsumers] = React.useState(false);
 
-    const debouncedFilterChange = _.debounce(async (value) => {
+    const fetchDataDebounced = useAsyncDebounce(fetchData, 100)
+
+    const changeFilterDebounced = useAsyncDebounce(async (value) => {
         if (filter !== value) {
             setFilter(value);
         }
@@ -105,8 +105,8 @@ function QueuesTable({
 
     // Listen for changes in pagination and use the state to fetch our new data
     React.useEffect(() => {
-        fetchData({ pageIndex, pageSize, filter, useRegex })
-    }, [fetchData, pageIndex, pageSize, filter, useRegex]);
+        fetchDataDebounced({ pageIndex, pageSize, filter, useRegex, sortBy })
+    }, [fetchDataDebounced, pageIndex, pageSize, filter, useRegex, sortBy]);
 
     // Render the UI for your table
     return (
@@ -118,7 +118,7 @@ function QueuesTable({
                     <input
                         type="text"
                         onChange={(e) => {
-                            debouncedFilterChange(e.target.value)
+                            changeFilterDebounced(e.target.value)
                         }} />
                 </span>
                 <span>
@@ -139,12 +139,8 @@ function QueuesTable({
                         {headerGroups.map(headerGroup => (
                             <tr {...headerGroup.getHeaderGroupProps()}>
                                 {headerGroup.headers.map(column => (
-                                    <th {...column.getHeaderProps()}>
-                                        <div onClick={() => {
-                                            
-                                            column.toggleSortBy();
-                                            console.log( {column})
-                                        }}>
+                                    <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                        <div >
                                             {column.render('Header')}
                                             {/* Add a sort direction indicator */}
                                             <span>
@@ -271,7 +267,7 @@ function QueuesTable({
         }
 
         await onDeleteQueues(selectedFlatRows, preventDeleteWithMessages, preventDeleteWithConsumers);
-        await fetchData({ pageIndex, pageSize, filter, useRegex });
+        await fetchData({ pageIndex, pageSize, filter, useRegex, sortBy });
     }
 
     async function purgeQueues(event) {
@@ -280,7 +276,7 @@ function QueuesTable({
         }
 
         await onPurgeQueues(selectedFlatRows);
-        await fetchData({ pageIndex, pageSize, filter, useRegex });
+        await fetchData({ pageIndex, pageSize, filter, useRegex, sortBy });
     }
 }
 export default QueuesTable;

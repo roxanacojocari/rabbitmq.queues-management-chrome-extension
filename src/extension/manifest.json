@@ -1,0 +1,26 @@
+{
+  "name": "Queues management for RabbitMQ",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "description": "Queues management chrome extensions for RabbitMQ that allows you to remove and purge multiple queues at a time",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png",
+    "256": "icons/icon256.png",
+    "512": "icons/icon512.png",
+    "1024": "icons/icon1024.png"
+  },
+  "browser_action": {
+    "default_icon": "icons/icon1024.png"
+  },
+  "background": { "scripts": ["background.js"] },
+  "permissions": ["<all_urls>", "storage"],
+  "web_accessible_resources": ["icons/icon128.png"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["bundle.js"]
+    }
+  ]
+}

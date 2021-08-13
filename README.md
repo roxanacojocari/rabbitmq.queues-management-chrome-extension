@@ -1,0 +1,1 @@
+# Queues management chrome extensions for RabbitMQ

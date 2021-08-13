@@ -1,0 +1,66 @@
+{
+  "name": "rabbitmq.queues-management-chrome-extension",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava",
+    "start": "webpack --watch --mode=development",
+    "build": "webpack",
+    "create-zip": "npm run build && cd dist && zip -r dist.zip * && cd ..",
+    "clean": "rm -rf dist"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-proposal-decorators": "^7.0.0",
+    "@babel/plugin-proposal-export-namespace-from": "^7.0.0",
+    "@babel/plugin-proposal-function-sent": "^7.0.0",
+    "@babel/plugin-proposal-json-strings": "^7.0.0",
+    "@babel/plugin-proposal-numeric-separator": "^7.0.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/plugin-proposal-throw-expressions": "^7.0.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/plugin-syntax-import-meta": "^7.0.0",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-react": "^7.14.5",
+    "@babel/register": "^7.15.3",
+    "ava": "^3.15.0",
+    "axios": "^0.21.1",
+    "babel-loader": "^8.2.2",
+    "classnames": "^2.3.1",
+    "copy-webpack-plugin": "^9.0.1",
+    "css-loader": "^6.2.0",
+    "lodash": "^4.17.21",
+    "numeral": "^2.0.6",
+    "post-compile-webpack-plugin": "^0.1.2",
+    "react-hot-loader": "^4.13.0",
+    "react-table": "^7.7.0",
+    "request": "^2.85.0",
+    "sinon": "^11.1.2",
+    "style-loader": "^3.2.1",
+    "webpack": "^5.50.0",
+    "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "ava": {
+    "require": [
+      "@babel/register"
+    ]
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-fontawesome": "^0.1.15",
+    "bytes": "^3.1.0",
+    "i": "^0.3.6",
+    "npm": "^7.20.6",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-outside-click-handler": "^1.3.0",
+    "react-transition-group": "^4.4.2"
+  }
+}

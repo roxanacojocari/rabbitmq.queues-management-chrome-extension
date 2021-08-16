@@ -1,24 +1,7 @@
-import React from 'react'
-import { useAsyncDebounce, useTable, useRowSelect, usePagination, useSortBy } from 'react-table'
+import React from 'react';
+import { useAsyncDebounce, useTable, useRowSelect, usePagination, useSortBy } from 'react-table';
 import "./QueuesTable.css";
 import _ from 'lodash';
-
-const IndeterminateCheckbox = React.forwardRef(
-    ({ indeterminate, ...rest }, ref) => {
-        const defaultRef = React.useRef()
-        const resolvedRef = ref || defaultRef
-
-        React.useEffect(() => {
-            resolvedRef.current.indeterminate = indeterminate
-        }, [resolvedRef, indeterminate])
-
-        return (
-            <div>
-                <input type="checkbox" ref={resolvedRef} {...rest} />
-            </div>
-        )
-    }
-)
 
 function QueuesTable({
     columns,
@@ -62,31 +45,7 @@ function QueuesTable({
         },
         useSortBy,
         usePagination,
-        useRowSelect,
-        hooks => {
-            hooks.visibleColumns.push(columns => [
-                // Let's make a column for selection
-                {
-                    id: 'selection',
-                    canSort: false,
-                    // The header can use the table's getToggleAllRowsSelectedProps method
-                    // to render a checkbox
-                    Header: ({ getToggleAllRowsSelectedProps }) => (
-                        <div>
-                            <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
-                        </div>
-                    ),
-                    // The cell can use the individual row's getToggleRowSelectedProps method
-                    // to the render a checkbox
-                    Cell: ({ row }) => (
-                        <div>
-                            <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-                        </div>
-                    ),
-                },
-                ...columns,
-            ])
-        }
+        useRowSelect
     )
 
     const [filter, setFilter] = React.useState('');

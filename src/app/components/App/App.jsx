@@ -3,7 +3,7 @@ import axios from "axios";
 
 import QueuesTable from "../QueuesTable/QueuesTable.jsx";
 import getColumns from "../../helpers/columns.js";
-import { retrieveQueues, deleteQueue, purgeQueue } from "../../helpers/queueService.js"
+import { retrieveQueues, deleteQueue, purgeQueue } from "../../helpers/api.js"
 import regeneratorRuntime from "regenerator-runtime"
 
 class App extends React.Component {
@@ -29,11 +29,12 @@ class App extends React.Component {
 
     // Only update the data if this is the latest fetch
     if (fetchId === this.fetchIdRef.current) {
-      const paginationOptions = { page: ++pageIndex, pageSize };
-      const filteringOptions = { name: filter, useRegex };
-      const sortingOptions = sortBy && sortBy.length ? { sort: sortBy[0].id, sortReverse: sortBy[0].desc } : {};
+      let options = { page: ++pageIndex, pageSize, name: filter, useRegex };
 
-      const response = await retrieveQueues(this.props.config.authHeader, paginationOptions, filteringOptions, sortingOptions);
+      if (sortBy && sortBy.length)
+        options = { ...options, sort: sortBy[0].id, sortReverse: sortBy[0].desc };
+
+      const response = await retrieveQueues(this.props.config.authHeader, options);
 
       this.setState({
         data: response.data.items,

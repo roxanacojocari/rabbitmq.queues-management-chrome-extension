@@ -1,10 +1,10 @@
 import axios from "axios";
 
-async function retrieveQueues(authorization, { page, pageSize }, { name, useRegex }, { sort, sortReverse }) {
+async function retrieveQueues(authorization, { page, pageSize, name, useRegex, sort, sortReverse }) {
     const regex = useRegex ? 'true' : 'false';
     const encodedName = name ? encodeURIComponent(name) : '';
-
     let url = `/api/queues?page=${page}&page_size=${pageSize}&name=${encodedName}&use_regex=${regex}&pagination=true`;
+
     if (sort) {
         const encodedSortProperty = encodeURIComponent(sort);
         url = `/api/queues?page=${page}&page_size=${pageSize}&name=${encodedName}&use_regex=${regex}&sort=${encodedSortProperty}&sort_reverse=${sortReverse}&pagination=true`;
@@ -21,11 +21,13 @@ async function deleteQueue(authorization, vhost, name, ifEmpty, ifUnused) {
     const encodedName = encodeURIComponent(name);
     const encodedVHost = encodeURIComponent(vhost);
     let url = `/api/queues/${encodedVHost}/${encodedName}`;
+
     // query string parameters if-empty=true and / or if-unused=true
     // These prevent the delete from succeeding if the queue contains messages, or has consumers, respectively.
     if (ifEmpty) {
         url = `${url}?if-empty=true`;
     }
+
     if (ifUnused) {
         url = `${url}${ifEmpty ? '&' : '?'}if-unused=true`;
     }

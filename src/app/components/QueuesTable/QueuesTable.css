@@ -1,6 +1,7 @@
 .queuesTable {
   padding: 1rem;
 }
+
 .queuesTable table {
   border-spacing: 0;
   border: 1px solid black;
@@ -23,19 +24,21 @@
 
 .queuesTable tr:nth-child(odd) td {
   background: #eee;
-  background: -moz-linear-gradient(center top, #f0f0f0 0%,#e0e0e0 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #f0f0f0),color-stop(1, #e0e0e0));
-}
-.queuesTable tr:nth-child(even) td{
-  background: #fff;
-  background: -moz-linear-gradient(center top, #F8F8F8 0%,#ffffff 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #F8F8F8),color-stop(1, #ffffff));
+  background: -moz-linear-gradient(center top, #f0f0f0 0%, #e0e0e0 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #f0f0f0), color-stop(1, #e0e0e0));
 }
 
-.queuesTable  .pagination {
+.queuesTable tr:nth-child(even) td {
+  background: #fff;
+  background: -moz-linear-gradient(center top, #F8F8F8 0%, #ffffff 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #F8F8F8), color-stop(1, #ffffff));
+}
+
+.queuesTable .pagination {
   padding: 0.5rem 0.5rem 0.5rem 0rem;
   display: inline-flex;
 }
+
 .queuesTable .pagination button {
   padding: 1px 6px;
   border-width: 2px;
@@ -46,6 +49,7 @@
   padding: 1px 6px;
   align-self: center;
 }
+
 .queuesTable input[type="checkbox"] {
   margin: 0rem 0.5rem 0rem 0rem;
   vertical-align: middle;
@@ -65,4 +69,8 @@
 
 .queuesTable .deleteConditions * {
   margin: 0.5rem 0.5rem 0.5rem 0rem;
+}
+
+.horizontal * {
+  display: inline-block;
 }

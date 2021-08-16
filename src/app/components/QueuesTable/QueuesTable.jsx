@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAsyncDebounce, useTable, useRowSelect, usePagination, useSortBy } from 'react-table';
+import IndeterminateCheckbox from '../IndeterminateCheckbox/IndeterminateCheckbox';
 import './QueuesTable.css';
 import _ from 'lodash';
 
@@ -72,7 +73,7 @@ function QueuesTable ({
     <div className='queuesTable'>
       <h1>Queues management</h1>
       <div className='section section-invisible' />
-      <div>
+      <div className='horizontal'>
         <span>Filter:{' '}
           <input
             type='text'
@@ -82,13 +83,7 @@ function QueuesTable ({
           />
         </span>
         <span>
-          <input
-            type='checkbox'
-            checked={useRegex}
-            onChange={e => {
-              setUseRegex(!useRegex);
-            }}
-          />
+          <IndeterminateCheckbox onChange={e => setUseRegex(!useRegex)} checked={useRegex} title='Use regex' />
           Regex{' '}
         </span>
       </div>

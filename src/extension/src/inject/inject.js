@@ -1,18 +1,18 @@
-import startApp from "../../../app/index";
+import startApp from '../../../app/index';
 
-chrome.extension.sendMessage({ type: "queues-management-rabbit-load" }, function (response) {
+chrome.extension.sendMessage({ type: 'queues-management-rabbit-load' }, function (response) {
   if (!isRabbitManagement()) return;
 
   const scriptEl = createElement(`<script>(${bootstrapScript.toString()})();</script>`);
   window.document.head.appendChild(scriptEl);
 
   chrome.runtime.sendMessage({
-    type: "queues-management-rabbit-start"
+    type: 'queues-management-rabbit-start'
   });
 
-  window.addEventListener("message", e => {
-    if (e.data.source === "queues-management") {
-      const root = window.document.querySelector("#queues-management-root");
+  window.addEventListener('message', e => {
+    if (e.data.source === 'queues-management') {
+      const root = window.document.querySelector('#queues-management-root');
 
       const config = {
         authHeader: e.data.authHeader,
@@ -23,32 +23,32 @@ chrome.extension.sendMessage({ type: "queues-management-rabbit-load" }, function
   });
 });
 
-function isRabbitManagement() {
-  const title = window.document.head.querySelector("title");
-  return title.innerText === "RabbitMQ Management";
+function isRabbitManagement () {
+  const title = window.document.head.querySelector('title');
+  return title.innerText === 'RabbitMQ Management';
 }
 
-function createElement(htmlString) {
+function createElement (htmlString) {
   return document.createRange().createContextualFragment(htmlString);
 }
 
-function bootstrapScript() {
+function bootstrapScript () {
   // global var used by rabbitmq code
   extension_count++;
-  NAVIGATION['Queues management'] = ["#/queues-management", "management"];
+  NAVIGATION['Queues management'] = ['#/queues-management', 'management'];
   dispatcher_add(sammy => {
-    sammy.get("/queues-management", context => {
-      current_highlight = "#/queues-management";
+    sammy.get('/queues-management', context => {
+      current_highlight = '#/queues-management';
       update_navigation();
-      replace_content("main", "<div id='queues-management-root'></div>");
+      replace_content('main', "<div id='queues-management-root'></div>");
 
       const message = {
-        source: "queues-management",
+        source: 'queues-management',
         authHeader: auth_header(),
         timerInterval: window.timer_interval
       };
 
-      window.postMessage(message, "*");
+      window.postMessage(message, '*');
     });
   });
 }

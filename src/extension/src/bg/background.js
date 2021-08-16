@@ -1,5 +1,5 @@
 // const setupAutoReload = require("./setupAutoReload");
-import setupAutoReload from "./setupAutoReload";
+import setupAutoReload from './setupAutoReload';
 const tabs = [];
 
 setupAutoReload();
@@ -12,12 +12,12 @@ chrome.tabs.onActivated.addListener(activeInfo => {
   }
 });
 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  if (request && request.type === "queues-management-rabbit-load") {
-      sendResponse('RabbitMQ extension enabled!');
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request && request.type === 'queues-management-rabbit-load') {
+    sendResponse('RabbitMQ extension enabled!');
   }
 
-  if (request && request.type === "queues-management-rabbit-start") {
+  if (request && request.type === 'queues-management-rabbit-start') {
     tabs.push(sender.tab.id);
     chrome.browserAction.enable(sender.tab.id);
   }

@@ -5,7 +5,7 @@ const filesInDirectory = dir =>
     dir.createReader().readEntries(entries =>
       Promise.all(
         entries
-          .filter(e => e.name[0] !== ".")
+          .filter(e => e.name[0] !== '.')
           .map(e => (e.isDirectory ? filesInDirectory(e) : new Promise(resolve => e.file(resolve))))
       )
         .then(files => [].concat(...files))
@@ -38,7 +38,7 @@ const watchChanges = (dir, lastTimestamp) => {
 
 const setupAutoReload = () => {
   chrome.management.getSelf(self => {
-    if (self.installType === "development") {
+    if (self.installType === 'development') {
       chrome.runtime.getPackageDirectoryEntry(dir => watchChanges(dir));
     }
   });

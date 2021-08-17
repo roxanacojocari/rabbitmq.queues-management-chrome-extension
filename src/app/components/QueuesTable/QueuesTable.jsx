@@ -83,7 +83,7 @@ function QueuesTable ({
           />
         </span>
         <span>
-          <IndeterminateCheckbox onChange={e => setUseRegex(!useRegex)} checked={useRegex} title='Use regex' />
+          <input type='checkbox' onChange={e => setUseRegex(!useRegex)} checked={useRegex} />
           Regex{' '}
         </span>
       </div>
@@ -124,7 +124,7 @@ function QueuesTable ({
             })}
             <tr>
               {loading ? (
-              // Use our custom loading state to show a loading indicator
+                // Use our custom loading state to show a loading indicator
                 <td colSpan='10000'>Loading...</td>
               ) : (
                 <td colSpan='10000'>

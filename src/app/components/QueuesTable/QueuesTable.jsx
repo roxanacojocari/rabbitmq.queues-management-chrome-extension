@@ -1,8 +1,7 @@
 import React from 'react';
 import { useAsyncDebounce, useTable, useRowSelect, usePagination, useSortBy } from 'react-table';
-import IndeterminateCheckbox from '../IndeterminateCheckbox/IndeterminateCheckbox';
+import QueuesFilter from '../QueuesFilter/QueuesFilter';
 import './QueuesTable.css';
-import _ from 'lodash';
 
 function QueuesTable ({
   columns,
@@ -30,7 +29,7 @@ function QueuesTable ({
     nextPage,
     previousPage,
     setPageSize,
-    state: { selectedRowIds, pageIndex, pageSize, sortBy }
+    state: { pageIndex, pageSize, sortBy }
   } = useTable(
     {
       columns,
@@ -73,20 +72,11 @@ function QueuesTable ({
     <div className='queuesTable'>
       <h1>Queues management</h1>
       <div className='section section-invisible' />
-      <div className='horizontal'>
-        <span>Filter:{' '}
-          <input
-            type='text'
-            onChange={(e) => {
-              changeFilterDebounced(e.target.value);
-            }}
-          />
-        </span>
-        <span>
-          <input type='checkbox' onChange={e => setUseRegex(!useRegex)} checked={useRegex} />
-          Regex{' '}
-        </span>
-      </div>
+      <QueuesFilter
+        onFilterChanged={e => changeFilterDebounced(e.target.value)}
+        checkboxChecked={useRegex}
+        onCheckboxChanged={e => setUseRegex(!useRegex)}
+      />
       <div className='section section-invisible' />
       <div>
         <table {...getTableProps()}>
@@ -123,15 +113,17 @@ function QueuesTable ({
               );
             })}
             <tr>
-              {loading ? (
-                // Use our custom loading state to show a loading indicator
-                <td colSpan='10000'>Loading...</td>
-              ) : (
-                <td colSpan='10000'>
-                  Showing {page.length} of {totalCount}{' '}
-                  results
-                </td>
-              )}
+              {loading
+                ? (
+              // Use our custom loading state to show a loading indicator
+                  <td colSpan='10000'>Loading...</td>
+                  )
+                : (
+                  <td colSpan='10000'>
+                    Showing {page.length} of {totalCount}{' '}
+                    results
+                  </td>
+                  )}
             </tr>
           </tbody>
         </table>

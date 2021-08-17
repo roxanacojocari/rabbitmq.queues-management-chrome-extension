@@ -1,0 +1,10 @@
+.pagination {
+    padding: 0.5rem 0.5rem 0.5rem 0rem;
+    display: inline-flex;
+}
+
+.pagination button {
+    padding: 1px 6px;
+    border-width: 2px;
+    border-style: outset;
+}

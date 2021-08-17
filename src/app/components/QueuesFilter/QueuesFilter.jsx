@@ -1,4 +1,5 @@
 import React from 'react';
+import './QueuesFilter.css';
 
 function QueuesFilter ({
   onFilterChanged,

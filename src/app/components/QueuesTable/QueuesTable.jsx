@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAsyncDebounce, useTable, useRowSelect, usePagination, useSortBy } from 'react-table';
+import QueuesActions from '../QueuesActions/QueuesActions';
 import QueuesFilter from '../QueuesFilter/QueuesFilter';
 import TablePagination from '../TablePagination/TablePagination';
 import './QueuesTable.css';
@@ -63,12 +64,29 @@ function QueuesTable ({
     }
   }, 1000);
 
+  async function deleteQueues (event) {
+    if (!selectedFlatRows.length) {
+      return;
+    }
+
+    await onDeleteQueues(selectedFlatRows, preventDeleteWithMessages, preventDeleteWithConsumers);
+    await fetchData({ pageIndex, pageSize, filter, useRegex, sortBy });
+  }
+
+  async function purgeQueues (event) {
+    if (!selectedFlatRows.length) {
+      return;
+    }
+
+    await onPurgeQueues(selectedFlatRows);
+    await fetchData({ pageIndex, pageSize, filter, useRegex, sortBy });
+  }
+
   // Listen for changes in pagination and use the state to fetch our new data
   React.useEffect(() => {
     fetchDataDebounced({ pageIndex, pageSize, filter, useRegex, sortBy });
   }, [fetchDataDebounced, pageIndex, pageSize, filter, useRegex, sortBy]);
 
-  // Render the UI for your table
   return (
     <div className='queuesTable'>
       <h1>Queues management</h1>
@@ -142,57 +160,15 @@ function QueuesTable ({
         />
       </div>
       <div className='section section-invisible' />
-      <div className='deleteConditions'>
-        <div>
-          <strong>
-            <span>Delete options{' '}</span>
-          </strong>
-        </div>
-        <span>
-          <input
-            type='checkbox'
-            checked={preventDeleteWithMessages}
-            onChange={e => {
-              setPreventDeleteWithMessages(!preventDeleteWithMessages);
-            }}
-          />
-          do not delete queues containing messages{' '}
-        </span>
-        <span>
-          <input
-            type='checkbox'
-            checked={preventDeleteWithConsumers}
-            onChange={e => {
-              setPreventDeleteWithConsumers(!preventDeleteWithConsumers);
-            }}
-          />
-          do not delete queues with consumers{' '}
-        </span>
-      </div>
-      <div className='section section-invisible' />
-      <div className='queuesButtons'>
-        <input type='submit' onClick={deleteQueues} value='Delete selected queues' />
-        <input type='submit' onClick={purgeQueues} value='Purge selected queues' />
-      </div>
+      <QueuesActions
+        preventDeleteWithMessagesChecked={preventDeleteWithMessages}
+        onPreventDeleteWithMessagesChanged={e => setPreventDeleteWithMessages(!preventDeleteWithMessages)}
+        preventDeleteWithConsumersChecked={preventDeleteWithConsumers}
+        onPreventDeleteWithConsumersChanged={e => setPreventDeleteWithConsumers(!preventDeleteWithConsumers)}
+        deleteQueues={deleteQueues}
+        purgeQueues={purgeQueues}
+      />
     </div>
   );
-
-  async function deleteQueues (event) {
-    if (!selectedFlatRows.length) {
-      return;
-    }
-
-    await onDeleteQueues(selectedFlatRows, preventDeleteWithMessages, preventDeleteWithConsumers);
-    await fetchData({ pageIndex, pageSize, filter, useRegex, sortBy });
-  }
-
-  async function purgeQueues (event) {
-    if (!selectedFlatRows.length) {
-      return;
-    }
-
-    await onPurgeQueues(selectedFlatRows);
-    await fetchData({ pageIndex, pageSize, filter, useRegex, sortBy });
-  }
 }
 export default QueuesTable;

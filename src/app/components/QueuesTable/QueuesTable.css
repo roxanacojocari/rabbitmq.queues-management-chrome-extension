@@ -47,15 +47,3 @@
 .queuesTable th div {
   display: inline-block;
 }
-
-.queuesTable .queuesButtons {
-  display: inline-flex;
-}
-
-.queuesTable .queuesButtons input[type="submit"] {
-  margin: 0.5rem 0.5rem 0.5rem 0rem;
-}
-
-.queuesTable .deleteConditions * {
-  margin: 0.5rem 0.5rem 0.5rem 0rem;
-}

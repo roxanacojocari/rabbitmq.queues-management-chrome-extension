@@ -1,1 +1,1 @@
-# Queues management chrome extensions for RabbitMQ
+# Queues management chrome extension for RabbitMQ

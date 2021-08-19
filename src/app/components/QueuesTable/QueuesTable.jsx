@@ -1,7 +1,9 @@
 import React from 'react';
 import { useAsyncDebounce, useTable, useRowSelect, usePagination, useSortBy } from 'react-table';
+import LoadingIndicator from '../LoadingIndicator/LoadingIndicator';
 import QueuesActions from '../QueuesActions/QueuesActions';
 import QueuesFilter from '../QueuesFilter/QueuesFilter';
+import SortDirectionIndicator from '../SortDirectionIndicator/SortDirectionIndicator';
 import TablePagination from '../TablePagination/TablePagination';
 import './QueuesTable.css';
 
@@ -106,14 +108,7 @@ function QueuesTable ({
                   <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                     <div>
                       {column.render('Header')}
-                      {/* Add a sort direction indicator */}
-                      <span>
-                        {column.isSorted
-                          ? column.isSortedDesc
-                            ? ' 🔽'
-                            : ' 🔼'
-                          : ''}
-                      </span>
+                      <SortDirectionIndicator isSorted={column.isSorted} isSortedDesc={column.isSortedDesc} />
                     </div>
                   </th>
                 ))}
@@ -131,19 +126,11 @@ function QueuesTable ({
                 </tr>
               );
             })}
-            <tr>
-              {loading
-                ? (
-              // Use our custom loading state to show a loading indicator
-                  <td colSpan='10000'>Loading...</td>
-                  )
-                : (
-                  <td colSpan='10000'>
-                    Showing {page.length} of {totalCount}{' '}
-                    results
-                  </td>
-                  )}
-            </tr>
+            <LoadingIndicator
+              loading={loading}
+              displayedResults={page.length}
+              totalResults={totalCount}
+            />
           </tbody>
         </table>
         <TablePagination

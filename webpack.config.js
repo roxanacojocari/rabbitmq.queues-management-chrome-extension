@@ -1,11 +1,10 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const PostCompile = require('post-compile-webpack-plugin');
-const axios = require('axios');
 
 module.exports = {
   entry: {
-    bundle: './src/extension/src/inject/inject.js',
-    background: './src/extension/src/bg/background.js'
+    bundle: './src/extension/src/scripts/content-script.js',
+    inject: './src/extension/src/scripts/inject.js',
+    background: './src/extension/src/background/background.js'
   },
   node: {
     global: false

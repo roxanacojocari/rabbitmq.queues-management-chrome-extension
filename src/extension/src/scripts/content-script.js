@@ -1,17 +1,18 @@
 import startApp from '../../../app/index';
 
-chrome.extension.sendMessage({ type: 'queues-management-rabbit-load' }, function (response) {
+chrome.runtime.sendMessage({ type: 'initialising-queues-management' }, function (response) {
   if (!isRabbitManagement()) return;
 
-  const scriptEl = createElement(`<script>(${bootstrapScript.toString()})();</script>`);
+  const scriptEl = document.createElement('script');
+  scriptEl.src = chrome.runtime.getURL('inject.js');
   window.document.head.appendChild(scriptEl);
 
   chrome.runtime.sendMessage({
-    type: 'queues-management-rabbit-start'
+    type: 'starting-queues-management'
   });
 
   window.addEventListener('message', e => {
-    if (e.data.source === 'queues-management') {
+    if (e.data.source === 'queues-management-extension') {
       const root = window.document.querySelector('#queues-management-root');
 
       const config = {
@@ -32,7 +33,7 @@ function createElement (htmlString) {
   return document.createRange().createContextualFragment(htmlString);
 }
 
-function bootstrapScript () {
+function injecttabScript () {
   // global var used by rabbitmq code
   extension_count++;
   NAVIGATION['Queues management'] = ['#/queues-management', 'management'];
@@ -43,7 +44,7 @@ function bootstrapScript () {
       replace_content('main', "<div id='queues-management-root'></div>");
 
       const message = {
-        source: 'queues-management',
+        source: 'queues-management-extension',
         authHeader: auth_header(),
         timerInterval: window.timer_interval
       };

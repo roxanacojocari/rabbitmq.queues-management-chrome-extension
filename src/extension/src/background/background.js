@@ -17,6 +17,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request) {
     switch (request.type) {
       case 'initialising-queues-management':
+        // send a response to trigger next step
         sendResponse(sender.tab.id);
         break;
 
@@ -29,6 +30,4 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         break;
     }
   }
-
-  return true;
 });

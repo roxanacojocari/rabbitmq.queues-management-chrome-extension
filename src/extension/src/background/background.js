@@ -1,9 +1,4 @@
-// const setupAutoReload = require("./setupAutoReload");
-import setupAutoReload from './setupAutoReload';
 const tabs = [];
-
-// TODO fix Error handling response: TypeError: chrome.runtime.getPackageDirectoryEntry is not a function
-// setupAutoReload();
 
 chrome.tabs.onActivated.addListener(activeInfo => {
   if (tabs.includes(activeInfo.tabId)) {

@@ -2,6 +2,7 @@
 import setupAutoReload from './setupAutoReload';
 const tabs = [];
 
+// TODO fix Error handling response: TypeError: chrome.runtime.getPackageDirectoryEntry is not a function
 // setupAutoReload();
 
 chrome.tabs.onActivated.addListener(activeInfo => {
@@ -19,7 +20,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         sendResponse(sender.tab.id);
         break;
 
-      case 'starting-queues-management':
+      case 'queues-management-initialised':
         tabs.push(sender.tab.id);
         chrome.action.enable(sender.tab.id);
         break;

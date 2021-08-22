@@ -1,3 +1,13 @@
+function sendRootElementInjectedMessage () {
+  const message = {
+    source: 'queues-management-root-element-injected',
+    authHeader: auth_header(),
+    timerInterval: window.timer_interval
+  };
+
+  window.postMessage(message, '*');
+}
+
 (function () {
   // global var used by rabbitmq code
   extension_count++;
@@ -6,15 +16,9 @@
     sammy.get('/queues-management', context => {
       current_highlight = '#/queues-management';
       update_navigation();
-      replace_content('main', "<div id='queues-management-root'></div>");
+      replace_content('main', "<div id='queues-management-root-element'></div>");
 
-      const message = {
-        source: 'queues-management-extension',
-        authHeader: auth_header(),
-        timerInterval: window.timer_interval
-      };
-
-      window.postMessage(message, '*');
+      sendRootElementInjectedMessage();
     });
   });
 })();

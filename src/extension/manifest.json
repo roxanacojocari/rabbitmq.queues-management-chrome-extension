@@ -12,7 +12,8 @@
     "1024": "icons/icon1024.png"
   },
   "action": {
-    "default_icon": "icons/icon1024.png"
+    "default_icon": "icons/icon1024.png",
+    "default_title": "Queues management for RabbitMQ"
   },
   "background": {
     "service_worker": "background.js"

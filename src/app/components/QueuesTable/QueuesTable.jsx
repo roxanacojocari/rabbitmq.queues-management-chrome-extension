@@ -15,7 +15,8 @@ function QueuesTable ({
   fetchData,
   loading,
   totalCount,
-  pageCount: controlledPageCount
+  pageCount: controlledPageCount,
+  refreshInterval
 }) {
   const {
     getTableProps,
@@ -54,11 +55,9 @@ function QueuesTable ({
 
   const [filter, setFilter] = React.useState('');
   const [useRegex, setUseRegex] = React.useState(false);
-
   const [preventDeleteWithMessages, setPreventDeleteWithMessages] = React.useState(false);
   const [preventDeleteWithConsumers, setPreventDeleteWithConsumers] = React.useState(false);
-
-  const fetchDataDebounced = useAsyncDebounce(fetchData, 100);
+  const timerRef = React.createRef(undefined);
 
   const changeFilterDebounced = useAsyncDebounce(async (value) => {
     if (filter !== value) {
@@ -83,11 +82,18 @@ function QueuesTable ({
     await onPurgeQueues(selectedFlatRows);
     await fetchData({ pageIndex, pageSize, filter, useRegex, sortBy });
   }
+  const fetchDataDebounced = useAsyncDebounce(fetchData, 150);
 
-  // Listen for changes in pagination and use the state to fetch our new data
   React.useEffect(() => {
-    fetchDataDebounced({ pageIndex, pageSize, filter, useRegex, sortBy });
-  }, [fetchDataDebounced, pageIndex, pageSize, filter, useRegex, sortBy]);
+    async function fetchDataAndRefetchAfterTimeout () {
+      clearTimeout(timerRef.current);
+      await fetchDataDebounced({ pageIndex, pageSize, filter, useRegex, sortBy });
+      timerRef.current = setTimeout(() => fetchDataAndRefetchAfterTimeout(), refreshInterval);
+    }
+    fetchDataAndRefetchAfterTimeout();
+
+    return () => clearTimeout(timerRef.current);
+  }, [fetchDataDebounced, pageIndex, pageSize, filter, useRegex, sortBy, refreshInterval]);
 
   return (
     <div className='queuesTable'>
